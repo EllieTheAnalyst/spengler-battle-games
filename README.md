@@ -65,4 +65,6 @@ Next: build our own frontend (replacing the Lovable prototype) directly on the d
 
 ## Team
 
-Ellie (data pipeline, backend, project management), Fara (KPIs, Streamlit prototype), Aïda (UX/UI, user testing, Lovable prototype).
+- Ellie (data pipeline, backend, project management)
+- Fara (KPIs, Streamlit prototype)
+- Aïda (UX/UI, user testing, Lovable prototype)
