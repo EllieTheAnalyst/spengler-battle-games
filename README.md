@@ -1,4 +1,4 @@
-# UBS Key Player Battle
+# Spengler Battle Games
 
 A mobile fan app that makes hockey stats engaging for new fans. Built for SIC DataHack 2026 (Spengler Cup, Davos).
 
