@@ -1,0 +1,172 @@
+# =====================================================================
+# UBS Key Player Battle – config
+# Read by the pipeline notebooks and the app.
+# =====================================================================
+
+# --- Data ------------------------------------------------------------
+data:
+  root: "data"
+  bronze:
+    events: "bronze/events/year={year}/game={game:02d}"
+    stats:  "bronze/stats/year={year}/game={game:02d}"
+  bronze_files:
+    events: "*Events*.csv"
+    stats:  "*Statistics*.csv"
+  silver:
+    events:  "silver/events/year={year}/game={game:02d}"
+    stats:   "silver/stats/year={year}/game={game:02d}"
+    players: "silver/players/year={year}/game={game:02d}"
+  gold:
+    player_metrics: "gold/player_metrics/year={year}/game={game:02d}"
+    votes: "gold/votes.csv"
+
+active_game:
+  year: 2025
+  game: 11
+
+# --- KPI settings ----------------------------------------------------
+events:
+  blueline_crossing:
+    fast_threshold: 7                  # m/s, ~75th percentile of crossing speeds
+    direction: "TowardsOpponent"       # exact source value
+
+# --- Metrics ---------------------------------------------------------
+# column: column name in gold
+# unit:   fraction = 0–1 (show ×100 as %), number, count
+metrics:
+  # Greatest Teamplayer
+  a_per_60:
+    column: "A_per60"
+    label: "Assists"
+    unit: number
+    higher_is_better: true
+  bks_per_60:
+    column: "BKS_per60"
+    label: "Blocked shots"
+    unit: number
+    higher_is_better: true
+  xgf_pct:
+    column: "xGF-%"
+    label: "Chances for his team"
+    unit: fraction
+    higher_is_better: true
+  pcw_pct:
+    column: "PCW-%"
+    label: "Puck battles won"
+    unit: fraction
+    higher_is_better: true
+  pass_partners:
+    column: "Pass_partners"
+    label: "Pass partners"
+    unit: count
+    higher_is_better: true
+
+  # Most Dangerous Player
+  xg_sum:
+    column: "xGsum"
+    label: "Scoring danger"
+    unit: number
+    higher_is_better: true
+  shots:
+    column: "S"
+    label: "Shots"
+    unit: count
+    higher_is_better: true
+  shots_on_target_pct:
+    column: "Shots_on_target_pct"
+    label: "Shots on target"
+    unit: fraction
+    higher_is_better: true
+  fast_blue_line_crossings:
+    column: "Fast_blueline_crossings"
+    label: "Fast attacks"
+    unit: count
+    higher_is_better: true
+  shots_pre:
+    column: "S (PRE)"
+    label: "Shots under pressure"
+    unit: count
+    higher_is_better: true
+
+  # Best Goalkeeper
+  shots_against:
+    column: "SA"
+    label: "Shots faced"
+    unit: count
+    higher_is_better: true             # workload
+  save_pct:
+    column: "SV_pct"
+    label: "Saves"
+    unit: fraction
+    higher_is_better: true
+  goals_against:
+    column: "GA"
+    label: "Goals let in"
+    unit: count
+    higher_is_better: false
+  xga:
+    column: "xGa"
+    label: "Danger faced"
+    unit: number
+    higher_is_better: true             # difficulty faced
+  xg_diff:
+    column: "xG_Diff"
+    label: "Goals prevented"
+    unit: number
+    higher_is_better: true             # goals saved above expected
+
+# --- Categories (battle types) ---------------------------------------
+# players: matches the "role" column in gold
+categories:
+  greatest_teamplayer:
+    title: "Greatest Teamplayer"
+    question: "Who was the greatest teamplayer tonight?"
+    players: skater
+    metrics: [a_per_60, bks_per_60, xgf_pct, pcw_pct, pass_partners]
+  most_dangerous_player:
+    title: "Most Dangerous Player"
+    question: "Who was the most dangerous player tonight?"
+    players: skater
+    metrics: [xg_sum, shots, shots_on_target_pct, fast_blue_line_crossings, shots_pre]
+  best_goalkeeper:
+    title: "Best Goalkeeper"
+    question: "Who was the best goalkeeper tonight?"
+    players: goalie
+    metrics: [shots_against, save_pct, goals_against, xga, xg_diff]
+
+# --- Radar chart scaling ---------------------------------------------
+normalisation:
+  method: min_max
+  reference: all_players_in_category     # min/max over every eligible player, not just the two
+  range: [0, 100]
+  when_min_equals_max: 50
+  when_value_missing: 0
+
+# --- Missing data ----------------------------------------------------
+missing_data:
+  xga:
+    when_shot_xg_missing: use_known_subtotal    # show Known_xG_subtotal instead of empty
+    show_note: "{Missing_xG_count} shot(s) without xG data"
+
+# --- Voting ----------------------------------------------------------
+voting:
+  one_vote_per_user_per_battle: true
+  results_visible: after_vote
+
+# --- Name corrections (typos in the source data) ----------------------
+# player_id: correct display name
+name_corrections:
+  888057604: "Gavin McCarthy"      # source: "McCartthy"
+
+# --- Battles (two players per category) ------------------------------
+# One player per team; player_ids from gold
+battles:
+  - battle_id: "2025-11-teamplayer"
+    category: greatest_teamplayer
+    player_ids: [322236, 888057604]        # Calle Andersson (HC Davos) vs Gavin McCarthy (Selects)
+  - battle_id: "2025-11-dangerous"
+    category: most_dangerous_player
+    player_ids: [346405, 888057617]        # Filip Zadina (HC Davos) vs Quinn Finley (Selects)
+  - battle_id: "2025-11-goalkeeper"
+    category: best_goalkeeper
+    player_ids: [150983, 888057597]        # Sandro Aeschlimann (HC Davos) vs Adam Gajan (Selects)

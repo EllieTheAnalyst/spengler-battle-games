@@ -1,0 +1,14 @@
+# data
+pandas>=2.2,<3        # pyspark doesn't fully support pandas 3 yet
+openpyxl              # read Excel files
+pyarrow
+
+# pipeline
+pyspark>=4.0          # needs Java 17
+
+# app
+streamlit
+pyyaml                # read config.yaml
+
+# notebooks / # %% cells in VS Code
+ipykernel
