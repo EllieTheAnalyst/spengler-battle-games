@@ -59,9 +59,9 @@ A new battle needs no code: add three lines (`battle_id`, `category`, `player_id
 
 ## Status
 
-Done: tested pipeline, fan-friendly labels, app data layer, Lovable prototype with real game stats.
-Demo only: fan vote percentages.
-Next: build our own frontend (replacing the Lovable prototype) directly on the data layer, then more games, persistent voting and 1–3 stats per battle
+- Done: tested pipeline, fan-friendly labels, app data layer, Lovable prototype with real game stats.
+- Demo only: fan vote percentages.
+- Next: build our own frontend (replacing the Lovable prototype) directly on the data layer, then more games, persistent voting and 1–3 stats per battle
 
 ## Team
 
